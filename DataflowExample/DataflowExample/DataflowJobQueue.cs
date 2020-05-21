@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Polly;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace DataflowExample
 {
 	public class DataflowJobQueue
 	{
-		private BroadcastBlock<IEventHandler> _jobs;
+		private BufferBlock<IEventHandler> _jobs;
 		private static DataflowJobQueue _instance = null;
 		private static readonly object lockObject = new object();
 
@@ -32,11 +33,13 @@ namespace DataflowExample
 
 		public DataflowJobQueue()
 		{
-			_jobs = new BroadcastBlock<IEventHandler>(job => job);
+			_jobs = new BufferBlock<IEventHandler>();
 		}
 
 		public void RegisterHandler<T>(Action<T> handleAction) where T : IEventHandler
 		{
+			var policy = Policy.Handle<Exception>().Retry(3);
+
 			// We have to have a wrapper to work with IJob instead of T
 			Action<IEventHandler> actionWrapper = (job) => handleAction((T)job);
 

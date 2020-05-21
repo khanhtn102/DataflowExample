@@ -8,6 +8,6 @@ namespace DataflowExample
 {
 	public interface IEventHandler
 	{
-		Task<bool> ExecuteAsync();
+		void Execute();
 	}
 }

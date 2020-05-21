@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DataflowExample.EventHandler
@@ -15,11 +16,10 @@ namespace DataflowExample.EventHandler
 			_queueMessage = queueMessage;
 		}
 
-		public async Task<bool> ExecuteAsync()
+		public void Execute()
 		{
-			await Task.Delay(2000);
-			Console.WriteLine($"RUN - Job name: SendEmail - Queue name: {_queueMessage.QueueName}");
-			return true;
+			Task.Delay(2000);
+			Console.WriteLine($"RUN - Job name: SendEmail - Queue name: {_queueMessage.QueueName} - Thread ID: {Thread.CurrentThread.ManagedThreadId}");
 		}
 	}
 }

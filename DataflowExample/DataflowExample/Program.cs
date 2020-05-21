@@ -11,9 +11,9 @@ namespace DataflowExample
 	{
 		static void Main(string[] args)
 		{
-			DataflowJobQueue.Instance.RegisterHandler<SendEmailEventHandler>(async job => await job.ExecuteAsync());
-			DataflowJobQueue.Instance.RegisterHandler<SendReportEventHandler>(async job => await job.ExecuteAsync());
-			DataflowJobQueue.Instance.RegisterHandler<WriteHistoryEventHandler>(async job => await job.ExecuteAsync());
+			DataflowJobQueue.Instance.RegisterHandler<SendEmailEventHandler>(job => job.Execute());
+			DataflowJobQueue.Instance.RegisterHandler<SendReportEventHandler>(job => job.Execute());
+			DataflowJobQueue.Instance.RegisterHandler<WriteHistoryEventHandler>(job => job.Execute());
 
 			Run().ConfigureAwait(false);
 
@@ -32,6 +32,8 @@ namespace DataflowExample
 
 				obj = QueueMessage.CreateQueueMessage(QueueNameCollection.WriteHistory, new object());
 				await DataflowJobQueue.Instance.Enqueue(EventHandlerFactory.GetEventHandlerInstance(obj));
+
+				Console.WriteLine("End one create job");
 			}
 		}
 	}
