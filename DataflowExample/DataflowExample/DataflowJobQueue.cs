@@ -38,7 +38,31 @@ namespace DataflowExample
 
 		public void RegisterHandler<T>(Action<T> handleAction) where T : IEventHandler
 		{
-			var policy = Policy.Handle<Exception>().Retry(3);
+			// Delay and retry when exception occurred
+			var policy = Policy.Handle<Exception>().RetryAsync(3, async (ex, retryCount) =>
+			{
+				// Write log
+				Console.WriteLine($"Error: {ex.Message} - Retry times: {retryCount}");
+				// Wait 5s and run again
+				await Task.Delay(5000);
+			});
+
+			// Handle after retry had still error
+			var fallBackpolicy = Policy.Handle<Exception>()
+				.FallbackAsync
+				(
+					fallbackAction: async cancellationtoken =>
+					{
+						// Move to bad queue
+
+						await Task.CompletedTask.ConfigureAwait(false);
+					}, onFallbackAsync: async ex =>
+					{
+						// Write log exception
+						Console.WriteLine($"Error: {ex.Message}");
+						await Task.CompletedTask.ConfigureAwait(false);
+					}
+				);
 
 			// We have to have a wrapper to work with IJob instead of T
 			Action<IEventHandler> actionWrapper = (job) => handleAction((T)job);
