@@ -8,9 +8,9 @@ namespace DataflowExample.EventHandler
 {
 	public static class EventHandlerFactory
 	{
-		public static IEventHandler GetEventHandlerInstance(QueueMessage queueMessage)
+		public static IEventHandler GetEventHandlerInstance(string queueName, QueueMessage queueMessage)
 		{
-			switch (queueMessage.QueueName)
+			switch (queueName)
 			{
 				case QueueNameCollection.SendEmail:
 					return new SendEmailEventHandler(queueMessage);

@@ -1,4 +1,5 @@
-﻿using Polly;
+﻿using DataflowExample.EventHandler;
+using Polly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,7 +55,8 @@ namespace DataflowExample
 					fallbackAction: async cancellationtoken =>
 					{
 						// Move to bad queue
-
+						var obj = new QueueMessage();
+						await Enqueue(EventHandlerFactory.GetEventHandlerInstance(QueueNameCollection.BadQueue, obj));
 						await Task.CompletedTask.ConfigureAwait(false);
 					}, onFallbackAsync: async ex =>
 					{
@@ -64,11 +66,20 @@ namespace DataflowExample
 					}
 				);
 
+			var retryWithFallback = fallBackpolicy.WrapAsync(policy);
+
 			// We have to have a wrapper to work with IJob instead of T
 			Action<IEventHandler> actionWrapper = (job) => handleAction((T)job);
 
 			// create the action block that executes the handler wrapper
-			var actionBlock = new ActionBlock<IEventHandler>((job) => actionWrapper(job));
+			var actionBlock = new ActionBlock<IEventHandler>(async (job) =>
+			{
+				await retryWithFallback.ExecuteAsync(async () =>
+				{
+					actionWrapper(job);
+					await Task.CompletedTask.ConfigureAwait(false);
+				});
+			});
 
 			// Link with Predicate - only if a job is of type T
 			_jobs.LinkTo(actionBlock, predicate: (job) => job is T);

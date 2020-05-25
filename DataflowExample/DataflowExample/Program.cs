@@ -22,16 +22,16 @@ namespace DataflowExample
 
 		static async Task Run()
 		{
-			for (var i = 0; i < 1000; i++)
+			for (var i = 0; i < 100; i++)
 			{
 				var obj = QueueMessage.CreateQueueMessage(QueueNameCollection.SendEmail, new object());
-				await DataflowJobQueue.Instance.Enqueue(EventHandlerFactory.GetEventHandlerInstance(obj));
+				await DataflowJobQueue.Instance.Enqueue(EventHandlerFactory.GetEventHandlerInstance(QueueNameCollection.SendEmail, obj));
 
 				obj = QueueMessage.CreateQueueMessage(QueueNameCollection.SendReport, new object());
-				await DataflowJobQueue.Instance.Enqueue(EventHandlerFactory.GetEventHandlerInstance(obj));
+				await DataflowJobQueue.Instance.Enqueue(EventHandlerFactory.GetEventHandlerInstance(QueueNameCollection.SendReport, obj));
 
 				obj = QueueMessage.CreateQueueMessage(QueueNameCollection.WriteHistory, new object());
-				await DataflowJobQueue.Instance.Enqueue(EventHandlerFactory.GetEventHandlerInstance(obj));
+				await DataflowJobQueue.Instance.Enqueue(EventHandlerFactory.GetEventHandlerInstance(QueueNameCollection.WriteHistory, obj));
 
 				Console.WriteLine("End one create job");
 			}

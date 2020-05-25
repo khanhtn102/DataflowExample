@@ -11,5 +11,6 @@ namespace DataflowExample
 		public const string SendEmail = "SendEmail";
 		public const string SendReport = "SendReport";
 		public const string WriteHistory = "WriteHistory";
+		public const string BadQueue = "BadQueue";
 	}
 }

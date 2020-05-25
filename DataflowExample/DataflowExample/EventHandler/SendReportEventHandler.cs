@@ -20,6 +20,12 @@ namespace DataflowExample.EventHandler
 		{
 			Task.Delay(1000);
 			Console.WriteLine($"RUN - Job name: SendReport - Queue name: {_queueMessage.QueueName} - Thread ID: {Thread.CurrentThread.ManagedThreadId}");
+
+			// random for error
+			Random random = new Random();
+			var rdNum = random.Next(1, 6);
+			if (rdNum % 2 == 0)
+				throw new Exception("Send report error");
 		}
 	}
 }
