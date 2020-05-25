@@ -55,8 +55,8 @@ namespace DataflowExample
 					fallbackAction: async cancellationtoken =>
 					{
 						// Move to bad queue
-						var obj = new QueueMessage();
-						await Enqueue(EventHandlerFactory.GetEventHandlerInstance(QueueNameCollection.BadQueue, obj));
+						//var obj = new QueueMessage();
+						//await Enqueue(EventHandlerFactory.GetEventHandlerInstance(QueueNameCollection.BadQueue, obj));
 						await Task.CompletedTask.ConfigureAwait(false);
 					}, onFallbackAsync: async ex =>
 					{
@@ -85,8 +85,10 @@ namespace DataflowExample
 			_jobs.LinkTo(actionBlock, predicate: (job) => job is T);
 		}
 
-		public async Task Enqueue(IEventHandler job)
+		public async Task EnqueueAsync<T>(string queueName, T message)
 		{
+			var queueMessage = QueueMessage.CreateQueueMessage(queueName, message);
+			var job = EventHandlerFactory.GetEventHandlerInstance(queueName, queueMessage);
 			await _jobs.SendAsync(job);
 		}
 	}

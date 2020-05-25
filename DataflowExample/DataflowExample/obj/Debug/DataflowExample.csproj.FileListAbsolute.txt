@@ -12,3 +12,4 @@ D:\Git\DataflowExample\DataflowExample\DataflowExample\obj\Debug\DataflowExample
 D:\Git\DataflowExample\DataflowExample\DataflowExample\obj\Debug\DataflowExample.csproj.CopyComplete
 D:\Git\DataflowExample\DataflowExample\DataflowExample\obj\Debug\DataflowExample.exe
 D:\Git\DataflowExample\DataflowExample\DataflowExample\obj\Debug\DataflowExample.pdb
+D:\Git\DataflowExample\DataflowExample\DataflowExample\obj\Debug\DataflowExample.csprojAssemblyReference.cache

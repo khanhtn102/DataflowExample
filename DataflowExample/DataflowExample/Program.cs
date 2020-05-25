@@ -24,14 +24,14 @@ namespace DataflowExample
 		{
 			for (var i = 0; i < 100; i++)
 			{
-				var obj = QueueMessage.CreateQueueMessage(QueueNameCollection.SendEmail, new object());
-				await DataflowJobQueue.Instance.Enqueue(EventHandlerFactory.GetEventHandlerInstance(QueueNameCollection.SendEmail, obj));
+				var obj = new object();
+				await DataflowJobQueue.Instance.EnqueueAsync(QueueNameCollection.SendEmail, obj);
 
-				obj = QueueMessage.CreateQueueMessage(QueueNameCollection.SendReport, new object());
-				await DataflowJobQueue.Instance.Enqueue(EventHandlerFactory.GetEventHandlerInstance(QueueNameCollection.SendReport, obj));
+				obj = new object();
+				await DataflowJobQueue.Instance.EnqueueAsync(QueueNameCollection.SendReport, obj);
 
-				obj = QueueMessage.CreateQueueMessage(QueueNameCollection.WriteHistory, new object());
-				await DataflowJobQueue.Instance.Enqueue(EventHandlerFactory.GetEventHandlerInstance(QueueNameCollection.WriteHistory, obj));
+				obj = new object();
+				await DataflowJobQueue.Instance.EnqueueAsync(QueueNameCollection.WriteHistory, obj);
 
 				Console.WriteLine("End one create job");
 			}
