@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataflowJobQueue.cs" />
+    <Compile Include="DataflowJobQueueErrorHandling.cs" />
     <Compile Include="EventHandler\EventHandlerFactory.cs" />
     <Compile Include="EventHandler\SendEmailEventHandler.cs" />
     <Compile Include="EventHandler\SendReportEventHandler.cs" />
